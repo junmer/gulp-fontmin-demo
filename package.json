@@ -1,0 +1,22 @@
+{
+  "name": "gulp-fontmin-demo",
+  "version": "1.0.0",
+  "description": "gulp-fontmin demo",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "gulp"
+  },
+  "author": "junmer",
+  "repository": "junmer/gulp-fontmin-demo",
+  "license": "ISC",
+  "dependencies": {
+    "gulp": "^3.8.11",
+    "gulp-concat": "^2.5.2",
+    "gulp-connect": "^2.2.0",
+    "gulp-fontmin": "^0.3.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-replace": "^0.5.3",
+    "through2": "^0.6.3"
+  }
+}
