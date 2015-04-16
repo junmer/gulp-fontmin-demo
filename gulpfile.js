@@ -1,5 +1,4 @@
 var gulp = require('gulp');
-var through = require('through2');
 var clean = require('gulp-clean');
 var rename = require('gulp-rename');
 var replace = require('gulp-replace');
@@ -27,28 +26,31 @@ gulp.task('styles', function() {
         .pipe(gulp.dest('dest/css'));
 });
 
-// function fontminText() {
-//     return through.obj(function(file, enc, cb) {
-//         function getText() {
-//             return through.obj(function(html, htmlEnc, htmlCb) {
-//                 file.fontminText = html;
-//                 htmlCb();
-//                 cb();
-//             });
-//         }
-//         gulp.src('*.html')
-//             .pipe(getText());
-//     });
-// }
-
-gulp.task('fonts', function() {
-    return gulp.src('src/font/*.ttf')
-        // .pipe(fontminText())
+function minifyFont(text, cb) {
+    gulp
+        .src('src/font/*.ttf')
         .pipe(fontmin({
-            text: '我去'
+            text: text
         }))
         .pipe(gulp.dest('dest/font'));
+}
+
+gulp.task('fonts', function(cb) {
+
+    var buffers = [];
+
+    gulp
+        .src('index.html')
+        .on('data', function(file) {
+            buffers.push(file.contents);
+        })
+        .on('end', function() {
+            var text = Buffer.concat(buffers).toString('utf-8');
+            minifyFont(text, cb);
+        });
+
 });
+
 
 gulp.task('connect', function() {
     connect.server({
@@ -57,7 +59,7 @@ gulp.task('connect', function() {
 });
 
 gulp.task('build', ['clean'], function() {
-    gulp.start(['html', 'styles', 'fonts']);
+    gulp.start(['styles', 'html', 'fonts']);
 });
 
 gulp.task('default', ['connect']);
